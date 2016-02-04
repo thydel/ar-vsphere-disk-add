@@ -1,0 +1,4 @@
+---
+
+factsd: /etc/ansible/facts.d
+udevrule: /etc/udev/rules.d/65-my-persistent-scsi.rules

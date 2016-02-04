@@ -1,0 +1,4 @@
+---
+
+- name: udevadm
+  command: udevadm trigger --verbose --subsystem-match=scsi --attr-match=model='Virtual disk*'

@@ -1,0 +1,17 @@
+---
+
+- name: Make filesystem
+
+  filesystem:
+    fstype: "{{ fstype }}"
+    dev: "{{ crypted }}"
+    opts: -m {{ reserved }}
+
+- name: Mount filesystem
+
+  mount:
+    name: "{{ mountpoint }}"
+    src: "{{ crypted }}"
+    fstype: "{{ fstype }}"
+    opts: "{{ mountopts }}"
+    state: mounted

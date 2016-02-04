@@ -1,0 +1,8 @@
+---
+
+-  {  include:  add.yml,        tags:  add  }
+-  {  include:  partition.yml,  tags:  partition  }
+-  {  include:  crypt.yml,      tags:  crypt  }
+-  {  include:  mkfs.yml,       tags:  mkfs  }
+
+# use rescan to force call to udevadm

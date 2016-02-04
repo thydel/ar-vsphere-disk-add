@@ -1,0 +1,61 @@
+---
+
+- name: See if crypsetup luksFormat already ran
+
+  failed_when: isluks_.rc >= 2
+  changed_when: False
+  always_run: True
+  register: isluks_
+
+  command: cryptsetup isLuks /dev/{{ vgname }}/{{ lvname }}
+  
+- name: Run cryptsetup luksFormat if needed
+
+  when: isluks_.rc == 1
+  environment:
+    diskpassword: "{{ diskpassword }}"
+
+  args:
+
+    executable: /bin/bash
+
+  shell:
+
+    env | grep diskpassword | cut -d= -f2 | head -c-1
+    | cryptsetup luksFormat --key-file - /dev/{{ vgname }}/{{ lvname }}
+
+#- pause: { seconds: 4 }
+
+- name: See if crypsetup luksFormat correctly ran
+
+  failed_when: isluks2_.rc >= 2
+  changed_when: False
+  always_run: True
+  register: isluks2_
+
+  command: cryptsetup isLuks /dev/{{ vgname }}/{{ lvname }}
+
+- assert: { that: diskpassword|length > 10 }
+      
+- name: Run cryptsetup luksOpen if needed
+
+  when: isluks2_.rc == 0
+  environment:
+    diskpassword: "{{ diskpassword }}"
+
+  args:
+
+    executable: /bin/bash
+    creates: /dev/mapper/{{ mapname }}
+
+  shell:
+
+    env | grep diskpassword | cut -d= -f2 | head -c-1
+    | cryptsetup luksOpen --key-file - /dev/{{ vgname }}/{{ lvname }} {{ mapname }}
+
+- name: Add crypted partition to cryptab
+
+  lineinfile:
+    dest: "{{ etc.crypttab }}"
+    line: "{{ mapname }} /dev/{{ vgname }}/{{ lvname }} none luks,noauto"
+    create: True

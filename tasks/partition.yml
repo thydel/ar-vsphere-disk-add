@@ -1,0 +1,88 @@
+---
+
+- name: See if the disk was created
+
+  register: devname_
+
+  stat:
+    path: "{{ devname }}"
+    follow: False
+
+- assert:
+    that: devname_.stat.exists
+          and devname_.stat.lnk_source is defined
+          and devname_.stat.lnk_source.find(device) != -1
+    
+- name: See if the disk is already partitoned
+
+  register: disk_
+  
+  partprobe:
+    disk: by-name/{{ name }}
+
+- name: Make a partition on an empty space disk using sfdisk
+
+  when: not disk_.partitioned and use_parted is not defined
+
+  shell: echo ';' | sfdisk /dev/disk/by-name/{{ name }}
+
+- name: Make a partition on an empty space disk using parted
+
+  when: not disk_.partitioned and use_parted is defined
+
+  command: /sbin/parted /dev/disk/by-name/{{ name }} mklabel gpt mkpart data 1MiB 100% set 1 lvm on
+
+- name: Recheck the partition after creation
+
+  register: disk_
+  
+  partprobe:
+    disk: by-name/{{ name }}
+
+- name: set partition type to LVM
+
+  when: disk_.partitioned and use_parted is not defined
+  register: setpart
+
+  set_partition_type:
+    disk: by-name/{{ name }}
+    part: 1
+    type: LVM
+
+- name: Get real device name when using parted
+
+  when: disk_.partitioned and use_parted is defined
+  register: realpath
+  always_run: True
+
+  command: realpath /dev/disk/by-name/{{ name }}
+
+- name: Set real partition device name when using sfdisk
+
+  when: disk_.partitioned and use_parted is not defined
+  
+  set_fact: { part_real_path: '{{ setpart.realpath }}' }
+
+- name: Set real partition device name when using parted
+
+  when: disk_.partitioned and use_parted is defined
+  
+  set_fact: { part_real_path: "{{ realpath.stdout ~ '1' }}" }
+
+- name: Add partition to LVM pool and create a volume group
+
+  when: disk_.partitioned
+
+  lvg:
+    pvs: "{{ part_real_path }}"
+    vg: "{{ vgname }}"
+    vg_options: ""
+
+- name: Create a volume using some of previouly created group
+
+  when: disk_.partitioned
+
+  lvol:
+    vg: "{{ vgname }}"
+    lv: "{{ lvname }}"
+    size: "{{ lvuse }}%FREE"
