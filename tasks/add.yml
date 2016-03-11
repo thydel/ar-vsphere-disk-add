@@ -13,6 +13,7 @@
 
   vsphere_add_disk:
 
+    validate_certs: '{{ validate_certs }}'
     vcenter_hostname: "{{ vcenter }}"
     username: "{{ username }}"
     password: "{{ vcenter_password }}"
@@ -35,7 +36,7 @@
 
   command: /lib/udev/scsi_id --export --whitelisted --device=/dev/{{ device }}
 
-- with_items: scsi_id_.stdout_lines
+- with_items: '{{ scsi_id_.stdout_lines }}'
   when: item.find('ID_SCSI_SERIAL') != -1
   set_fact:
     ID_SCSI_SERIAL: "{{ item }}"
