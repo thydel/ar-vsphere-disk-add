@@ -8,7 +8,7 @@
 
 - name: Add a disk to a VM
 
-  delegate_to: pysphere
+  delegate_to: '{{ pysphere }}'
   register: disk_
 
   vsphere_add_disk:
