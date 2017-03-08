@@ -25,12 +25,15 @@
 
 - name: create facts.d
 
+  become: True
+
   file:
     path: "{{ factsd }}"
     state: directory
 
 - name: Get new disk ID
 
+  become: True
   register: scsi_id_
   changed_when: False
   check_mode: False
@@ -45,6 +48,8 @@
 
 - name: Store new disk ID
 
+  become: True
+
   copy:
     content: |
       [vsphere]
@@ -53,6 +58,7 @@
     
 - name: Map id_scsi_serial to disk name
 
+  become: True
   notify: udevadm
 
   lineinfile:
@@ -67,6 +73,7 @@
 
 - name: Map id_scsi_serial to part name
 
+  become: True
   notify: udevadm
 
   lineinfile:
@@ -81,6 +88,7 @@
 
 - name: Force udevadm if requested
 
+  become: True
   when: rescan is defined
 
   command: udevadm trigger --verbose --subsystem-match=scsi --attr-match=model='Virtual disk*'
