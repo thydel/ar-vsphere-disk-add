@@ -7,7 +7,7 @@ dependencies:
     scm: git
     version: master
 
-  - name: partition
+  - name: partition-tools
     src: https://github.com/thyepi/amr-disk-part.git
     scm: git
     version: master
