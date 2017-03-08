@@ -21,7 +21,7 @@
 
   shell:
 
-    env | grep diskpassword | cut -d= -f2 | head -c-1
+    env | grep ^diskpassword | cut -d= -f2 | head -c-1
     | cryptsetup luksFormat --key-file - /dev/{{ vgname }}/{{ lvname }}
 
 #- pause: { seconds: 4 }
@@ -50,7 +50,7 @@
 
   shell:
 
-    env | grep diskpassword | cut -d= -f2 | head -c-1
+    env | grep ^diskpassword | cut -d= -f2 | head -c-1
     | cryptsetup luksOpen --key-file - /dev/{{ vgname }}/{{ lvname }} {{ mapname }}
 
 - name: Add crypted partition to cryptab
