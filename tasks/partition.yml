@@ -86,3 +86,4 @@
     vg: "{{ vgname }}"
     lv: "{{ lvname }}"
     size: "{{ lvuse }}%FREE"
+    shrink: False
