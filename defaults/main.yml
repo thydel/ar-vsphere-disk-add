@@ -7,3 +7,6 @@ vcenter:  "{{ vcenter_hostname }}"
 username: "{{ vcenter_username }}"
 
 vmname:   "{{ inventory_hostname }}.{{ vcenter_fqdn }}"
+
+etc:
+  crypttab: /etc/crypttab
