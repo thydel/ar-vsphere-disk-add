@@ -2,6 +2,12 @@
 
 dependencies:
 
-  - { role: pysphere }
-  - { role: partition }
-  - { role: etc-paths }
+  - name: pysphere
+    src: https://github.com/thyepi/amr-pysphere-misc.git
+    scm: git
+    version: master
+
+  - name: partition
+    src: https://github.com/thyepi/amr-disk-part.git
+    scm: git
+    version: master
