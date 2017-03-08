@@ -53,7 +53,7 @@
 
   when: disk_.partitioned and use_parted is defined
   register: realpath
-  always_run: True
+  check_mode: False
 
   command: realpath /dev/disk/by-name/{{ name }}
 

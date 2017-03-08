@@ -10,6 +10,7 @@
 
   delegate_to: '{{ pysphere }}'
   register: disk_
+  no_log: True
 
   vsphere_add_disk:
 
@@ -32,7 +33,7 @@
 
   register: scsi_id_
   changed_when: False
-  always_run: True
+  check_mode: False
 
   command: /lib/udev/scsi_id --export --whitelisted --device=/dev/{{ device }}
 

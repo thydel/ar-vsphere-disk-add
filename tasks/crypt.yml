@@ -4,7 +4,7 @@
 
   failed_when: isluks_.rc >= 2
   changed_when: False
-  always_run: True
+  check_mode: False
   register: isluks_
 
   command: cryptsetup isLuks /dev/{{ vgname }}/{{ lvname }}
@@ -30,7 +30,7 @@
 
   failed_when: isluks2_.rc >= 2
   changed_when: False
-  always_run: True
+  check_mode: False
   register: isluks2_
 
   command: cryptsetup isLuks /dev/{{ vgname }}/{{ lvname }}
