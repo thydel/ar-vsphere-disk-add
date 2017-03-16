@@ -4,7 +4,7 @@
   debug:
     msg: |
 
-      Add disk unit '{{ unit }}' of size '{{ size }}G' named {{ name }} on VM '{{ vmname }}'
+      Add disk unit '{{ unit }}' of size '{{ size }}G' named {{ name42 }} on VM '{{ vmname }}'
 
 - name: Add a disk to a VM
 
@@ -69,7 +69,7 @@
       ENV{DEVTYPE}=="disk",
       ENV{ID_BUS}=="scsi",
       ENV{ID_SCSI_SERIAL}=="{{ id_scsi_serial }}",
-      SYMLINK+="disk/by-name/{{ name }}"
+      SYMLINK+="disk/by-name/{{ name42 }}"
 
 - name: Map id_scsi_serial to part name
 
@@ -84,7 +84,7 @@
       ENV{DEVTYPE}=="partition",
       ENV{ID_BUS}=="scsi",
       ENV{ID_SCSI_SERIAL}=="{{ id_scsi_serial }}",
-      SYMLINK+="disk/by-name/{{ name }}-part%n"
+      SYMLINK+="disk/by-name/{{ name42 }}-part%n"
 
 - name: Force udevadm if requested
 

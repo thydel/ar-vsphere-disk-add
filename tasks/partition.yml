@@ -18,26 +18,26 @@
   register: disk_
   
   partprobe:
-    disk: by-name/{{ name }}
+    disk: by-name/{{ name42 }}
 
 - name: Make a partition on an empty space disk using sfdisk
 
   when: not disk_.partitioned and use_parted is not defined
 
-  shell: echo ';' | sfdisk /dev/disk/by-name/{{ name }}
+  shell: echo ';' | sfdisk /dev/disk/by-name/{{ name42 }}
 
 - name: Make a partition on an empty space disk using parted
 
   when: not disk_.partitioned and use_parted is defined
 
-  command: /sbin/parted /dev/disk/by-name/{{ name }} mklabel gpt mkpart data 1MiB 100% set 1 lvm on
+  command: /sbin/parted /dev/disk/by-name/{{ name42 }} mklabel gpt mkpart data 1MiB 100% set 1 lvm on
 
 - name: Recheck the partition after creation
 
   register: disk_
   
   partprobe:
-    disk: by-name/{{ name }}
+    disk: by-name/{{ name42 }}
 
 - name: set partition type to LVM
 
@@ -45,7 +45,7 @@
   register: setpart
 
   set_partition_type:
-    disk: by-name/{{ name }}
+    disk: by-name/{{ name42 }}
     part: 1
     type: LVM
 
@@ -55,7 +55,7 @@
   register: realpath
   check_mode: False
 
-  command: realpath /dev/disk/by-name/{{ name }}
+  command: realpath /dev/disk/by-name/{{ name42 }}
 
 - name: Set real partition device name when using sfdisk
 

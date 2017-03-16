@@ -1,11 +1,11 @@
-diskname: "{{ name }}"
-devname: /dev/disk/by-name/{{ name }}
+diskname: "{{ name42 }}"
+devname: /dev/disk/by-name/{{ name42 }}
 vgname: "{{ inventory_hostname }}-crypt-{{ unit }}"
-lvname: "{{ name }}"
+lvname: "{{ name42 }}"
 lvuse: "{{ vm_disk_lvuse }}"
-mapname: "{{ name }}"
+mapname: "{{ name42 }}"
 crypted: /dev/mapper/{{ mapname }}
-mountpoint: /{{ name }}
+mountpoint: /{{ name42 }}
 fstype: "{{ vm_disk_fstype }}"
 mountopts: "{{ vm_disk_mount_opts }}"
 reserved: "{{ vm_disk_reserved }}"
