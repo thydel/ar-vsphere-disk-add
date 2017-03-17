@@ -1,0 +1,35 @@
+---
+
+- name: Map id_scsi_serial to disk name
+
+  register: udev_name
+
+  lineinfile:
+    dest: "{{ udevrule }}"
+    create: True
+    regexp: '^ENV.DEVTYPE.=="disk".*{{ id_scsi_serial }}'
+    line: >-
+      ENV{DEVTYPE}=="disk",
+      ENV{ID_BUS}=="scsi",
+      ENV{ID_SCSI_SERIAL}=="{{ id_scsi_serial }}",
+      SYMLINK+="disk/by-name/{{ name42 }}"
+
+- name: Map id_scsi_serial to part name
+
+  register: udev_part
+
+  lineinfile:
+    dest: "{{ udevrule }}"
+    create: True
+    regexp: '^ENV.DEVTYPE.=="partition".*{{ id_scsi_serial }}'
+    line: >-
+      ENV{DEVTYPE}=="partition",
+      ENV{ID_BUS}=="scsi",
+      ENV{ID_SCSI_SERIAL}=="{{ id_scsi_serial }}",
+      SYMLINK+="disk/by-name/{{ name42 }}-part%n"
+
+- name: Uses udevadm
+
+  when: udev_name.changed or udev_part.changed or rescan is defined
+
+  command: udevadm trigger --verbose --subsystem-match=scsi --attr-match=model='Virtual disk*'

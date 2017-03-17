@@ -1,0 +1,31 @@
+---
+
+- name: Map id_scsi_serial to disk name
+
+  notify: udevadm
+
+  lineinfile:
+    dest: "{{ udevrule }}"
+    create: True
+    regexp: '^ENV.DEVTYPE.=="disk".*{{ id_scsi_serial }}'
+    line: >-
+      ENV{DEVTYPE}=="disk",
+      ENV{ID_BUS}=="scsi",
+      ENV{ID_SCSI_SERIAL}=="{{ id_scsi_serial }}",
+      SYMLINK+="disk/by-name/{{ name42 }}"
+
+- name: Map id_scsi_serial to part name
+
+  notify: udevadm
+
+  lineinfile:
+    dest: "{{ udevrule }}"
+    create: True
+    regexp: '^ENV.DEVTYPE.=="partition".*{{ id_scsi_serial }}'
+    line: >-
+      ENV{DEVTYPE}=="partition",
+      ENV{ID_BUS}=="scsi",
+      ENV{ID_SCSI_SERIAL}=="{{ id_scsi_serial }}",
+      SYMLINK+="disk/by-name/{{ name42 }}-part%n"
+
+- meta: flush_handlers
