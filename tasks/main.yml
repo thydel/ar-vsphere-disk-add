@@ -9,6 +9,6 @@
 
 -  {  include:  partition.yml,            tags:  partition,  become: True  }
 -  {  include:  crypt.yml,                tags:  crypt,      become: True  }
--  {  include:  mkfs.yml,                 tags:  mkfs,       become: True  }
+-  {  include:  mkfs.yml,                 tags:  mkfs,       become: True, when: name42 != 'swap'  }
 
 # use rescan to force call to udevadm
