@@ -1,6 +1,6 @@
 diskname: "{{ name42 }}"
 devname: /dev/disk/by-name/{{ name42 }}
-vgname: "{{ inventory_hostname }}-crypt-{{ unit }}"
+vgname: "{{ inventory_hostname }}-{% if crypt is defined %}crypt-{% endif %}{{ unit }}"
 lvname: "{{ name42 }}"
 lvuse: "{{ vm_disk_lvuse }}"
 mapname: "{{ name42 }}"

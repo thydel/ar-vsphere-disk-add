@@ -8,7 +8,8 @@
 -  {  include:  name-without-handler.yml, tags:  add,        become: True  }
 
 -  {  include:  partition.yml,            tags:  partition,  become: True  }
--  {  include:  crypt.yml,                tags:  crypt,      become: True  }
--  {  include:  mkfs.yml,                 tags:  mkfs,       become: True, when: name42 != 'swap'  }
+-  {  include:  crypt.yml,                tags:  crypt,      become: True, when: crypt is defined  }
+-  {  include:  mkfs.yml,                 tags:  mkfs,       become: True, when: name42 != 'swap' and crypt is defined }
+-  {  include:  mkfs-no-crypt.yml,        tags:  mkfs,       become: True, when: name42 != 'swap' }
 
 # use rescan to force call to udevadm
